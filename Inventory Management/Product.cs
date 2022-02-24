@@ -7,7 +7,7 @@ using System.ComponentModel;    // Required for using BindingList
 
 namespace Inventory_Management
 {
-    internal class Product
+    public class Product
     {   
         //public static BindingList<Part> parts = new BindingList<Part>()
         public int ProductId { get; set; }  // The unique ID of the product

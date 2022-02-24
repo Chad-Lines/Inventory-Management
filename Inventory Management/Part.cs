@@ -9,6 +9,8 @@ namespace Inventory_Management
 {
     public abstract class Part
     {
+        // PROPERTIES --------------------------------
+
         public int PartId { get; set; }     // The part's unique ID
         public string Name { get; set; }    // The part's name
         public decimal Price { get; set; }  // The part's price

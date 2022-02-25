@@ -11,7 +11,7 @@ namespace Inventory_Management
     {
         // PROPERTIES --------------------------------
 
-        public static BindingList<Part> parts = new BindingList<Part>();            // The parts that make up the product. This is created
+        public static BindingList<Part> AssociatedParts = new BindingList<Part>();  // The parts that make up the product. This is created
                                                                                     // as a BindingList of Parts
         public static BindingList<Product> products = new BindingList<Product>();   // This is a binding list of the Products
 
@@ -32,6 +32,7 @@ namespace Inventory_Management
             products.Add(new Product { ProductId = 5, Name = "Rancher Acoustic-Electric", Price = 389.99m, InStock = 1, Min = 1, Max = 10 });
             products.Add(new Product { ProductId = 6, Name = "Series DC-X4S Acoustic", Price = 849.99m, InStock = 4, Min = 1, Max = 10 });
         }
+
 
         // METHODS --------------------------------
         public override string ToString()

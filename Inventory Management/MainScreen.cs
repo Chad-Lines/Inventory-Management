@@ -25,6 +25,15 @@ namespace Inventory_Management
             dgvProducts.MultiSelect = false;                                                            // Disabling multi-select
             dgvProducts.AllowUserToAddRows = false;                                                     // Disallow adding new rows
 
+            // Setting up the Part Datagrid
+            // -------------------------------
+            dgvParts.DataSource = Part.parts;
+            dgvParts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvParts.ReadOnly = true;
+            dgvParts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvParts.MultiSelect = false;
+            dgvParts.AllowUserToAddRows= false;
+
         }
 
         private void partsBinding(object sender, DataGridViewBindingCompleteEventArgs e)
@@ -111,6 +120,34 @@ namespace Inventory_Management
         {
                      
                
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Search for Parts     
+            dgvParts.ClearSelection();                              // This makes sure there is nothing highlighted as default
+            dgvParts.MultiSelect = true;                            // Allowing Multi-select
+
+            bool found = false;                                     // Setting the default value for the found variable
+
+            if (txtPartSearch.Text != "")                        // If the txtProductSearch box isn't empty...
+            {
+                for (int i = 0; i < Part.parts.Count; i++)          // Iterate through the product list...
+                {
+                    if (Part.parts[i].Name.ToUpper()                // Convert the search string AND the list item to Upper...
+                        .Contains(txtPartSearch.Text.ToUpper())) // And see if the search string is IN the list. If so...          
+                    {
+                        dgvParts.Rows[i].Selected = true;           // Flag the matching row as Selected, and 
+                        found = true;                               // Set found to true
+                    }
+                }
+            }
+            if (!found) { MessageBox.Show("No Matches Found."); }   // If there are no matches, inform the user
         }
     }
 }

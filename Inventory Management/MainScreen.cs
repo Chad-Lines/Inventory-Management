@@ -82,5 +82,35 @@ namespace Inventory_Management
             int Index = dgvProducts.CurrentCell.RowIndex;                   // You can then use that object to reference
             Product.products.Remove(P);                                     // Delete the item from the list
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // Search for Products     
+            dgvProducts.ClearSelection();                                           // This makes sure there is nothing highlighted as default
+            dgvProducts.MultiSelect = true;                                         // Allowing Multi-select
+
+            bool found = false;                                                     // Setting the default value for the found variable
+
+            if (txtProductSearch.Text != "")                                        // If the txtProductSearch box isn't empty...
+            {
+                for (int i = 0; i < Product.products.Count; i++)                    // Iterate through the product list...
+                {                    
+                    if (Product.products[i].Name.ToUpper()                          // Convert the search string AND the list item to Upper...
+                        .Contains(txtProductSearch.Text.ToUpper()))                 // And see if the search string is IN the list. If so...          
+                    {
+                        dgvProducts.Rows[i].Selected = true;                        // Flag the matching row as Selected, and 
+                        found = true;                                               // Set found to true
+                    }
+                }
+            }
+            if (!found) { MessageBox.Show("No Matches Found."); }                   // If there are no matches, inform the user
+
+        }
+
+        private void dgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+                     
+               
+        }
     }
 }

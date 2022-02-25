@@ -135,6 +135,7 @@
             this.button3.TabIndex = 9;
             this.button3.Text = "Delete";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
             // 
@@ -144,6 +145,7 @@
             this.button4.TabIndex = 10;
             this.button4.Text = "Modify";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button5
             // 
@@ -153,6 +155,7 @@
             this.button5.TabIndex = 11;
             this.button5.Text = "Add";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button6
             // 
@@ -162,6 +165,7 @@
             this.button6.TabIndex = 12;
             this.button6.Text = "Delete";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // button7
             // 
@@ -171,6 +175,7 @@
             this.button7.TabIndex = 13;
             this.button7.Text = "Modify";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // button8
             // 
@@ -180,6 +185,7 @@
             this.button8.TabIndex = 14;
             this.button8.Text = "Add";
             this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button9
             // 

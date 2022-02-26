@@ -272,5 +272,35 @@ namespace Inventory_Management
 
             }
         }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            if (radio_inhouse.Checked)
+            {
+                Inventory.AllParts.Add(new Inhouse { 
+                    PartId = Int32.Parse(txtpart_id.Text), 
+                    Name = txtpart_name.Text, 
+                    Price = Decimal.Parse(txtpart_price.Text), 
+                    InStock = Int32.Parse(txtpart_inventory.Text), 
+                    Min = Int32.Parse(txtpart_min.Text),
+                    Max = Int32.Parse(txtpart_max.Text),
+                    MachineID = Int32.Parse(txtpart_mach_comp.Text)
+                });
+            }
+            else
+            {
+                Inventory.AllParts.Add(new Outsourced
+                {
+                    PartId = Int32.Parse(txtpart_id.Text),
+                    Name = txtpart_name.Text,
+                    Price = Decimal.Parse(txtpart_price.Text),
+                    InStock = Int32.Parse(txtpart_inventory.Text),
+                    Min = Int32.Parse(txtpart_min.Text),
+                    Max = Int32.Parse(txtpart_max.Text),
+                    CompanyName = txtpart_mach_comp.Text
+                });
+            }
+            
+        }
     }
 }

@@ -60,6 +60,15 @@ namespace Inventory_Management
         private void button3_Click(object sender, EventArgs e)
         {
             // Delete Part
+            if (dgvParts.CurrentRow == null || !dgvParts.CurrentRow.Selected)   // If there are no rows, or if there are none selected
+            {
+                MessageBox.Show("Nothing is Selected");                         // Show the user an error message
+                return;
+            }
+
+            Part P = dgvParts.CurrentRow.DataBoundItem as Part;                 // This is the actual object that is selected
+            int Index = dgvParts.CurrentCell.RowIndex;                          // You can then use that object to reference
+            Part.parts.Remove(P);                                               // Delete the item from the list
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -135,12 +144,12 @@ namespace Inventory_Management
 
             bool found = false;                                     // Setting the default value for the found variable
 
-            if (txtPartSearch.Text != "")                        // If the txtProductSearch box isn't empty...
+            if (txtPartSearch.Text != "")                           // If the txtProductSearch box isn't empty...
             {
                 for (int i = 0; i < Part.parts.Count; i++)          // Iterate through the product list...
                 {
                     if (Part.parts[i].Name.ToUpper()                // Convert the search string AND the list item to Upper...
-                        .Contains(txtPartSearch.Text.ToUpper())) // And see if the search string is IN the list. If so...          
+                        .Contains(txtPartSearch.Text.ToUpper()))    // And see if the search string is IN the list. If so...          
                     {
                         dgvParts.Rows[i].Selected = true;           // Flag the matching row as Selected, and 
                         found = true;                               // Set found to true

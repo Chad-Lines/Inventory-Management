@@ -12,9 +12,21 @@ namespace Inventory_Management
 {
     public partial class AddPart : Form
     {
-        public string inHouseText = "Machine ID";
-        public string outsourceText = "Company Name";
-        public static BindingList<Part> parts = Part.parts;
+        // String Variables
+        public string inHouseText = "Machine ID";                           // The label text for Inhouse parts
+        public string outsourceText = "Company Name";                       // The label text for Outsourced parts
+        public string outsourceInputError = "Please enter a company name";  // The error text for Outsourced parts
+
+        // Validation Variables
+        public bool nameValid = false;
+        public bool inventoryValid = false;
+        public bool priceValid = false;
+        public bool minValid = false;
+        public bool maxValid = false;
+        public bool machOrCompValid = false;
+
+        // Getting the Part list
+        public static BindingList<Part> parts = Part.parts;                 // Getting the list of parts
 
         public AddPart()
         {
@@ -37,7 +49,6 @@ namespace Inventory_Management
             txtpart_min.BackColor = System.Drawing.Color.Salmon;
             txtpart_max.BackColor = System.Drawing.Color.Salmon;
             txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;
-
         }
 
        public string GetNextID()
@@ -56,10 +67,18 @@ namespace Inventory_Management
 
         private bool allowSave()
         {
-            return true;
+            // This method checks whether all the inputs have been marked as valid.
+            // If they have, then we return 'true' which enables the Save button.
+            Console.WriteLine("Name: " + nameValid);
+            Console.WriteLine("Inv: " + inventoryValid);
+            Console.WriteLine("Price: " + priceValid);
+            Console.WriteLine("Min: " + minValid);
+            Console.WriteLine("Max: " + maxValid);
+            Console.WriteLine("M/C: " + machOrCompValid);
 
-            //int number;
-            //return (!(string.IsNullOrWhiteSpace(txtpart_name.Text)) &&
+            return nameValid && inventoryValid && priceValid && 
+                minValid && maxValid && machOrCompValid;        
+           
         }
 
         private void radio_outsourced_CheckedChanged(object sender, EventArgs e)
@@ -81,28 +100,48 @@ namespace Inventory_Management
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Close();   // Close this window
         }
 
         private void txtpart_name_TextChanged(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtpart_name.Text))
+            if (string.IsNullOrWhiteSpace(txtpart_name.Text))           // If the textbox is empty...
             {
-                txtpart_name.BackColor = System.Drawing.Color.Salmon;
-                Console.WriteLine("Empty");
+                txtpart_name.BackColor = System.Drawing.Color.Salmon;   // Set the background color to Salmon
+                nameValid = false;                                      //  Marking the field as invalid
             }
             else
             {
-                txtpart_name.BackColor = System.Drawing.Color.White;
-                Console.WriteLine("Not Empty");
+                txtpart_name.BackColor = System.Drawing.Color.White;    // If it's not empty, set the background color to Salmon
+                nameValid = true;                                       // Marking the field as valid
             }
-
-            SaveButton.Enabled = allowSave();
+            SaveButton.Enabled = allowSave();                           // Check if we can save
         }
 
         private void txtpart_inventory_TextChanged(object sender, EventArgs e)
         {
-            VerifyNumericInput(txtpart_inventory, lblInv_error);
+            try
+            {
+                Int32.Parse(txtpart_inventory.Text);                      // Try to convert the string into an Int
+                lblInv_error.Hide();                                  // If it works, hide the error label
+                inventoryValid = true;
+
+            }
+            catch (FormatException)
+            {
+                lblInv_error.Show();                                  // If it doesn't work, show the error label
+                inventoryValid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtpart_inventory.Text))          // If the textbox is empty...
+            {
+                txtpart_inventory.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+            }
+            else
+            {
+                txtpart_inventory.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+            }
+            SaveButton.Enabled = allowSave();                           // Check if we can save
         }
 
         private void txtpart_price_TextChanged(object sender, EventArgs e)
@@ -111,66 +150,107 @@ namespace Inventory_Management
             {
                 Decimal.Parse(txtpart_price.Text);                      // Try to convert the string into an Int
                 lblPrice_error.Hide();                                  // If it works, hide the error label
+                priceValid = true;
 
             }
             catch (FormatException)
             {
                 lblPrice_error.Show();                                  // If it doesn't work, show the error label
+                priceValid = false;
             }
 
             if (string.IsNullOrWhiteSpace(txtpart_price.Text))          // If the textbox is empty...
             {
                 txtpart_price.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+                priceValid = false;
             }
             else
             {
                 txtpart_price.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+                priceValid = true;
             }
-
             SaveButton.Enabled = allowSave();                           // Check if we can save
         }   
 
-        private void VerifyNumericInput(TextBox textBox, Label label)
+        private void txtpart_min_TextChanged(object sender, EventArgs e)
         {
-            // This method is used to verify that the user has input a number and not a string.
             try
             {
-                Int32.Parse(textBox.Text);                          // Try to convert the string into an Int
-                label.Hide();                                       // If it works, hide the error label
+                Int32.Parse(txtpart_min.Text);                      // Try to convert the string into an Int
+                lblMinMax_error.Hide();                                  // If it works, hide the error label
+                minValid = true;
 
             }
             catch (FormatException)
             {
-                label.Show();                                       // If it doesn't work, show the error label
+                lblMinMax_error.Show();                                  // If it doesn't work, show the error label
+                minValid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(textBox.Text))            // If the textbox is empty...
+            if (string.IsNullOrWhiteSpace(txtpart_min.Text))          // If the textbox is empty...
             {
-                textBox.BackColor = System.Drawing.Color.Salmon;    // Set the background color to Salmon
+                txtpart_min.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
             }
             else
             {
-                textBox.BackColor = System.Drawing.Color.White;     // If it's not empty, set it to White
+                txtpart_min.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
             }
+            SaveButton.Enabled = allowSave();                           // Check if we can save
 
-            SaveButton.Enabled = allowSave();                       // Check if we can save
-        }
-
-        private void txtpart_min_TextChanged(object sender, EventArgs e)
-        {
-            VerifyNumericInput(txtpart_min, lblMinMax_error);
         }
 
         private void txtpart_max_TextChanged(object sender, EventArgs e)
         {
-            VerifyNumericInput(txtpart_max, lblMinMax_error);
+            try
+            {
+                Int32.Parse(txtpart_max.Text);                      // Try to convert the string into an Int
+                lblMinMax_error.Hide();                                  // If it works, hide the error label
+                maxValid = true;
+
+            }
+            catch (FormatException)
+            {
+                lblMinMax_error.Show();                                  // If it doesn't work, show the error label
+                maxValid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtpart_max.Text))          // If the textbox is empty...
+            {
+                txtpart_max.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+            }
+            else
+            {
+                txtpart_max.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+            }
+            SaveButton.Enabled = allowSave();                           // Check if we can save
         }
 
         private void txtpart_mach_comp_TextChanged(object sender, EventArgs e)
         {
-            if (radio_inhouse.Checked == true)                              // If this is an in-house item...
+            if (radio_inhouse.Checked == true)                                              // If this is an in-house item...
             {
-                VerifyNumericInput(txtpart_mach_comp, lblMachineID_error);  // Make sure a Machine ID number is valid. Otherwise...
+                try
+                {
+                    Int32.Parse(txtpart_mach_comp.Text);                      // Try to convert the string into an Int
+                    lblMachineID_error.Hide();                                  // If it works, hide the error label
+                    machOrCompValid = true;
+
+                }
+                catch (FormatException)
+                {
+                    lblMachineID_error.Show();                                  // If it doesn't work, show the error label
+                    machOrCompValid = false;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtpart_mach_comp.Text))          // If the textbox is empty...
+                {
+                    txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+                }
+                else
+                {
+                    txtpart_mach_comp.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+                }
+                SaveButton.Enabled = allowSave();                           // Check if we can save
             }
             else
             {
@@ -178,14 +258,18 @@ namespace Inventory_Management
                 if (string.IsNullOrWhiteSpace(txtpart_mach_comp.Text))          // If the textbox is empty...
                 {
                     txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
-                    lblMachineID_error.Text = "Please enter a company name";    // Prompt the user to enter a Company
+                    lblMachineID_error.Text = outsourceInputError;              // Prompt the user to enter a Company
                     lblMachineID_error.Show();                                  // Show the error to the user
+                    machOrCompValid = false;
                 }
                 else
                 {
                     txtpart_mach_comp.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
                     lblMachineID_error.Hide();                                  // Hide the error label
+                    machOrCompValid = true;
                 }
+                SaveButton.Enabled = allowSave();
+
             }
         }
     }

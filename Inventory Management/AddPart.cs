@@ -26,43 +26,28 @@ namespace Inventory_Management
         public bool machOrCompValid = false;
 
         // Getting the Part list
-        public static BindingList<Part> parts = Part.parts;                 // Getting the list of parts
+        //public static BindingList<Part> parts = Part.parts;                 // Getting the list of parts
 
         public AddPart()
         {
             InitializeComponent();
-
-            // Setting the initial state of the various form elements
-            radio_inhouse.Checked = true;   // By default we're assuming that the part in-house            
-            txtpart_id.Text = GetNextID();  // Populate the Part ID text box
-            txtpart_id.ReadOnly = true;     // Disable the user from chaning the Part ID value
-            SaveButton.Enabled = false;     // Disabling the save button (until all data is entered)            
-            lblInv_error.Hide();            // Hiding the Inventory Error label
-            lblPrice_error.Hide();          // Hiding the Pirce/Cost Error label
-            lblMinMax_error.Hide();         // Hiding the Min/Max Error label
-            lblMachineID_error.Hide();      // Hiding the MachineID Error label
-
-            // Since the texboxes are all empty, we initialize them with a red background indicating that they are required.
-            txtpart_name.BackColor = System.Drawing.Color.Salmon;
-            txtpart_inventory.BackColor = System.Drawing.Color.Salmon;
-            txtpart_price.BackColor = System.Drawing.Color.Salmon;
-            txtpart_min.BackColor = System.Drawing.Color.Salmon;
-            txtpart_max.BackColor = System.Drawing.Color.Salmon;
-            txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;
+            resetForm();            // Reset the form
         }
 
        public string GetNextID()
         {
             // The purpose of this method is to generate the next ID automaticall by
             // comparing the existing IDs
-
-            int nextID = 0;                                                         // Initialize nextID as 0
-            for (int i = 0; i < parts.Count; i++)                                   // For each part...
+            //Inventory I = new Inventory();                                          
+            int nextID = 0;                                     // Initialize nextID as 0
+            for (int i = 0; i < Inventory.AllParts.Count; i++)  // For each part...
             {
-                if (parts[i].PartId >= nextID) { nextID = parts[i].PartId + 1; }    // If the PartID is greater or equal than the nextID, then
-            }                                                                       // set the nextID to PartID + 1
-
-            return nextID.ToString();                                               // Finally we return the nextID as a string
+                if (Inventory.AllParts[i].PartId >= nextID)     // If the PartID is greater or equal than the nextID, then...             
+                { 
+                    nextID = Inventory.AllParts[i].PartId + 1;  // set the nextID to PartID + 1
+                }    
+            }
+            return nextID.ToString();                           // Finally we return the nextID as a string
         }
 
         private bool allowSave()
@@ -275,32 +260,67 @@ namespace Inventory_Management
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (radio_inhouse.Checked)
-            {
-                Inventory.AllParts.Add(new Inhouse { 
-                    PartId = Int32.Parse(txtpart_id.Text), 
+            if (radio_inhouse.Checked)                              // If the Inhouse radio button is checked...
+            {           
+                Inhouse part = new Inhouse {                        // Create a new Inhouse part object with the
+                    PartId = Int32.Parse(txtpart_id.Text),          // parameters as defined by the user
                     Name = txtpart_name.Text, 
                     Price = Decimal.Parse(txtpart_price.Text), 
                     InStock = Int32.Parse(txtpart_inventory.Text), 
                     Min = Int32.Parse(txtpart_min.Text),
                     Max = Int32.Parse(txtpart_max.Text),
                     MachineID = Int32.Parse(txtpart_mach_comp.Text)
-                });
+                };
+
+                Inventory I = new Inventory();                      // Create an inventory object to access the methods
+                I.addPart(part);                                    // Add the part
             }
             else
             {
-                Inventory.AllParts.Add(new Outsourced
+                Outsourced part = new Outsourced                    // If the Inhouse radio button is not checked...
                 {
-                    PartId = Int32.Parse(txtpart_id.Text),
-                    Name = txtpart_name.Text,
+                    PartId = Int32.Parse(txtpart_id.Text),          // Create a new Oursourced part object with the
+                    Name = txtpart_name.Text,                       // parameters as defined by the user
                     Price = Decimal.Parse(txtpart_price.Text),
                     InStock = Int32.Parse(txtpart_inventory.Text),
                     Min = Int32.Parse(txtpart_min.Text),
                     Max = Int32.Parse(txtpart_max.Text),
                     CompanyName = txtpart_mach_comp.Text
-                });
+                };
+                Inventory I = new Inventory();                      // Create an inventory object to access the methods
+                I.addPart(part);                                    // Add the part
             }
-            
+            resetForm();                                            // Reset the Form                    
+            MessageBox.Show("New Part Created Successfully");       // Show a message letting the user know the part was created
+        }
+
+        private void resetForm()
+        {
+            // Reset all the text fields
+            txtpart_name.Clear();
+            txtpart_inventory.Clear();
+            txtpart_price.Clear();
+            txtpart_min.Clear();
+            txtpart_max.Clear();
+            txtpart_mach_comp.Clear();
+
+            // Setting the initial state of the various form elements
+            radio_inhouse.Checked = true;   // By default we're assuming that the part in-house            
+            txtpart_id.Text = GetNextID();  // Populate the Part ID text box
+            txtpart_id.ReadOnly = true;     // Disable the user from chaning the Part ID value
+            SaveButton.Enabled = false;     // Disabling the save button (until all data is entered)            
+            lblInv_error.Hide();            // Hiding the Inventory Error label
+            lblPrice_error.Hide();          // Hiding the Pirce/Cost Error label
+            lblMinMax_error.Hide();         // Hiding the Min/Max Error label
+            lblMachineID_error.Hide();      // Hiding the MachineID Error label
+
+            // Since the texboxes are all empty, we initialize them with a red background indicating that they are required.
+            txtpart_name.BackColor = System.Drawing.Color.Salmon;
+            txtpart_inventory.BackColor = System.Drawing.Color.Salmon;
+            txtpart_price.BackColor = System.Drawing.Color.Salmon;
+            txtpart_min.BackColor = System.Drawing.Color.Salmon;
+            txtpart_max.BackColor = System.Drawing.Color.Salmon;
+            txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;
         }
     }
 }

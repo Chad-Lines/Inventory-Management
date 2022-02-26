@@ -19,10 +19,25 @@ namespace Inventory_Management
         public AddPart()
         {
             InitializeComponent();
+
+            // Setting the initial state of the various form elements
             radio_inhouse.Checked = true;   // By default we're assuming that the part in-house            
             txtpart_id.Text = GetNextID();  // Populate the Part ID text box
             txtpart_id.ReadOnly = true;     // Disable the user from chaning the Part ID value
-            SaveButton.Enabled = false;     // Disabling the save button (until all data is entered)
+            SaveButton.Enabled = false;     // Disabling the save button (until all data is entered)            
+            lblInv_error.Hide();            // Hiding the Inventory Error label
+            lblPrice_error.Hide();          // Hiding the Pirce/Cost Error label
+            lblMinMax_error.Hide();         // Hiding the Min/Max Error label
+            lblMachineID_error.Hide();      // Hiding the MachineID Error label
+
+            // Since the texboxes are all empty, we initialize them with a red background indicating that they are required.
+            txtpart_name.BackColor = System.Drawing.Color.Salmon;
+            txtpart_inventory.BackColor = System.Drawing.Color.Salmon;
+            txtpart_price.BackColor = System.Drawing.Color.Salmon;
+            txtpart_min.BackColor = System.Drawing.Color.Salmon;
+            txtpart_max.BackColor = System.Drawing.Color.Salmon;
+            txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;
+
         }
 
        public string GetNextID()
@@ -50,11 +65,13 @@ namespace Inventory_Management
         private void radio_outsourced_CheckedChanged(object sender, EventArgs e)
         {
             label8.Text = outsourceText;    // Since the part outsourced, we set the text accordingly
+            lblMachineID_error.Hide();      // Hide any existing errors on button switch
         }
 
         private void radio_inhouse_CheckedChanged(object sender, EventArgs e)
         {
-            label8.Text = inHouseText;      // Since the part is assumed to be machined in-house, we set the text accordingly
+            label8.Text = inHouseText;  // Since the part is assumed to be machined in-house, we set the text accordingly
+            lblMachineID_error.Hide();  // Hide any existing errors on button switch
         }
 
         private void label7_Click(object sender, EventArgs e)
@@ -81,6 +98,95 @@ namespace Inventory_Management
             }
 
             SaveButton.Enabled = allowSave();
+        }
+
+        private void txtpart_inventory_TextChanged(object sender, EventArgs e)
+        {
+            VerifyNumericInput(txtpart_inventory, lblInv_error);
+        }
+
+        private void txtpart_price_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Decimal.Parse(txtpart_price.Text);                      // Try to convert the string into an Int
+                lblPrice_error.Hide();                                  // If it works, hide the error label
+
+            }
+            catch (FormatException)
+            {
+                lblPrice_error.Show();                                  // If it doesn't work, show the error label
+            }
+
+            if (string.IsNullOrWhiteSpace(txtpart_price.Text))          // If the textbox is empty...
+            {
+                txtpart_price.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+            }
+            else
+            {
+                txtpart_price.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+            }
+
+            SaveButton.Enabled = allowSave();                           // Check if we can save
+        }   
+
+        private void VerifyNumericInput(TextBox textBox, Label label)
+        {
+            // This method is used to verify that the user has input a number and not a string.
+            try
+            {
+                Int32.Parse(textBox.Text);                          // Try to convert the string into an Int
+                label.Hide();                                       // If it works, hide the error label
+
+            }
+            catch (FormatException)
+            {
+                label.Show();                                       // If it doesn't work, show the error label
+            }
+
+            if (string.IsNullOrWhiteSpace(textBox.Text))            // If the textbox is empty...
+            {
+                textBox.BackColor = System.Drawing.Color.Salmon;    // Set the background color to Salmon
+            }
+            else
+            {
+                textBox.BackColor = System.Drawing.Color.White;     // If it's not empty, set it to White
+            }
+
+            SaveButton.Enabled = allowSave();                       // Check if we can save
+        }
+
+        private void txtpart_min_TextChanged(object sender, EventArgs e)
+        {
+            VerifyNumericInput(txtpart_min, lblMinMax_error);
+        }
+
+        private void txtpart_max_TextChanged(object sender, EventArgs e)
+        {
+            VerifyNumericInput(txtpart_max, lblMinMax_error);
+        }
+
+        private void txtpart_mach_comp_TextChanged(object sender, EventArgs e)
+        {
+            if (radio_inhouse.Checked == true)                              // If this is an in-house item...
+            {
+                VerifyNumericInput(txtpart_mach_comp, lblMachineID_error);  // Make sure a Machine ID number is valid. Otherwise...
+            }
+            else
+            {
+                
+                if (string.IsNullOrWhiteSpace(txtpart_mach_comp.Text))          // If the textbox is empty...
+                {
+                    txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+                    lblMachineID_error.Text = "Please enter a company name";    // Prompt the user to enter a Company
+                    lblMachineID_error.Show();                                  // Show the error to the user
+                }
+                else
+                {
+                    txtpart_mach_comp.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+                    lblMachineID_error.Hide();                                  // Hide the error label
+                }
+            }
         }
     }
 }

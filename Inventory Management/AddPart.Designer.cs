@@ -41,12 +41,16 @@
             this.txtpart_id = new System.Windows.Forms.TextBox();
             this.txtpart_name = new System.Windows.Forms.TextBox();
             this.txtpart_inventory = new System.Windows.Forms.TextBox();
-            this.txtpart_price_cost = new System.Windows.Forms.TextBox();
-            this.txtpart_max = new System.Windows.Forms.TextBox();
+            this.txtpart_price = new System.Windows.Forms.TextBox();
             this.txtpart_min = new System.Windows.Forms.TextBox();
+            this.txtpart_max = new System.Windows.Forms.TextBox();
             this.txtpart_mach_comp = new System.Windows.Forms.TextBox();
             this.SaveButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.lblInv_error = new System.Windows.Forms.Label();
+            this.lblPrice_error = new System.Windows.Forms.Label();
+            this.lblMinMax_error = new System.Windows.Forms.Label();
+            this.lblMachineID_error = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -113,29 +117,29 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(67, 176);
+            this.label5.Location = new System.Drawing.Point(90, 175);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(57, 13);
+            this.label5.Size = new System.Drawing.Size(31, 13);
             this.label5.TabIndex = 6;
-            this.label5.Text = "Price/Cost";
+            this.label5.Text = "Price";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(97, 217);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(27, 13);
+            this.label6.Size = new System.Drawing.Size(24, 13);
             this.label6.TabIndex = 7;
-            this.label6.Text = "Max";
+            this.label6.Text = "Min";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(216, 217);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(24, 13);
+            this.label7.Size = new System.Drawing.Size(27, 13);
             this.label7.TabIndex = 8;
-            this.label7.Text = "Min";
+            this.label7.Text = "Max";
             this.label7.Click += new System.EventHandler(this.label7_Click);
             // 
             // label8
@@ -168,27 +172,31 @@
             this.txtpart_inventory.Name = "txtpart_inventory";
             this.txtpart_inventory.Size = new System.Drawing.Size(100, 20);
             this.txtpart_inventory.TabIndex = 12;
+            this.txtpart_inventory.TextChanged += new System.EventHandler(this.txtpart_inventory_TextChanged);
             // 
-            // txtpart_price_cost
+            // txtpart_price
             // 
-            this.txtpart_price_cost.Location = new System.Drawing.Point(131, 172);
-            this.txtpart_price_cost.Name = "txtpart_price_cost";
-            this.txtpart_price_cost.Size = new System.Drawing.Size(100, 20);
-            this.txtpart_price_cost.TabIndex = 13;
-            // 
-            // txtpart_max
-            // 
-            this.txtpart_max.Location = new System.Drawing.Point(131, 213);
-            this.txtpart_max.Name = "txtpart_max";
-            this.txtpart_max.Size = new System.Drawing.Size(68, 20);
-            this.txtpart_max.TabIndex = 14;
+            this.txtpart_price.Location = new System.Drawing.Point(131, 172);
+            this.txtpart_price.Name = "txtpart_price";
+            this.txtpart_price.Size = new System.Drawing.Size(100, 20);
+            this.txtpart_price.TabIndex = 13;
+            this.txtpart_price.TextChanged += new System.EventHandler(this.txtpart_price_TextChanged);
             // 
             // txtpart_min
             // 
-            this.txtpart_min.Location = new System.Drawing.Point(246, 213);
+            this.txtpart_min.Location = new System.Drawing.Point(131, 213);
             this.txtpart_min.Name = "txtpart_min";
-            this.txtpart_min.Size = new System.Drawing.Size(79, 20);
-            this.txtpart_min.TabIndex = 15;
+            this.txtpart_min.Size = new System.Drawing.Size(68, 20);
+            this.txtpart_min.TabIndex = 14;
+            this.txtpart_min.TextChanged += new System.EventHandler(this.txtpart_min_TextChanged);
+            // 
+            // txtpart_max
+            // 
+            this.txtpart_max.Location = new System.Drawing.Point(246, 213);
+            this.txtpart_max.Name = "txtpart_max";
+            this.txtpart_max.Size = new System.Drawing.Size(79, 20);
+            this.txtpart_max.TabIndex = 15;
+            this.txtpart_max.TextChanged += new System.EventHandler(this.txtpart_max_TextChanged);
             // 
             // txtpart_mach_comp
             // 
@@ -196,6 +204,7 @@
             this.txtpart_mach_comp.Name = "txtpart_mach_comp";
             this.txtpart_mach_comp.Size = new System.Drawing.Size(100, 20);
             this.txtpart_mach_comp.TabIndex = 16;
+            this.txtpart_mach_comp.TextChanged += new System.EventHandler(this.txtpart_mach_comp_TextChanged);
             // 
             // SaveButton
             // 
@@ -216,17 +225,65 @@
             this.CancelButton.UseVisualStyleBackColor = true;
             this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
+            // lblInv_error
+            // 
+            this.lblInv_error.AutoSize = true;
+            this.lblInv_error.ForeColor = System.Drawing.Color.Red;
+            this.lblInv_error.Location = new System.Drawing.Point(131, 153);
+            this.lblInv_error.Name = "lblInv_error";
+            this.lblInv_error.Size = new System.Drawing.Size(116, 13);
+            this.lblInv_error.TabIndex = 19;
+            this.lblInv_error.Text = "Please enter a number.";
+            this.lblInv_error.UseWaitCursor = true;
+            // 
+            // lblPrice_error
+            // 
+            this.lblPrice_error.AutoSize = true;
+            this.lblPrice_error.ForeColor = System.Drawing.Color.Red;
+            this.lblPrice_error.Location = new System.Drawing.Point(131, 195);
+            this.lblPrice_error.Name = "lblPrice_error";
+            this.lblPrice_error.Size = new System.Drawing.Size(200, 13);
+            this.lblPrice_error.TabIndex = 20;
+            this.lblPrice_error.Text = "Please enter a valid price (without the \'$\')";
+            this.lblPrice_error.UseWaitCursor = true;
+            // 
+            // lblMinMax_error
+            // 
+            this.lblMinMax_error.AutoSize = true;
+            this.lblMinMax_error.ForeColor = System.Drawing.Color.Red;
+            this.lblMinMax_error.Location = new System.Drawing.Point(131, 236);
+            this.lblMinMax_error.Name = "lblMinMax_error";
+            this.lblMinMax_error.Size = new System.Drawing.Size(116, 13);
+            this.lblMinMax_error.TabIndex = 21;
+            this.lblMinMax_error.Text = "Please enter a number.";
+            this.lblMinMax_error.UseWaitCursor = true;
+            // 
+            // lblMachineID_error
+            // 
+            this.lblMachineID_error.AutoSize = true;
+            this.lblMachineID_error.ForeColor = System.Drawing.Color.Red;
+            this.lblMachineID_error.Location = new System.Drawing.Point(131, 277);
+            this.lblMachineID_error.Name = "lblMachineID_error";
+            this.lblMachineID_error.Size = new System.Drawing.Size(116, 13);
+            this.lblMachineID_error.TabIndex = 22;
+            this.lblMachineID_error.Text = "Please enter a number.";
+            this.lblMachineID_error.UseWaitCursor = true;
+            // 
             // AddPart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(336, 331);
+            this.ClientSize = new System.Drawing.Size(343, 331);
+            this.Controls.Add(this.lblMachineID_error);
+            this.Controls.Add(this.lblMinMax_error);
+            this.Controls.Add(this.lblPrice_error);
+            this.Controls.Add(this.lblInv_error);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.txtpart_mach_comp);
-            this.Controls.Add(this.txtpart_min);
             this.Controls.Add(this.txtpart_max);
-            this.Controls.Add(this.txtpart_price_cost);
+            this.Controls.Add(this.txtpart_min);
+            this.Controls.Add(this.txtpart_price);
             this.Controls.Add(this.txtpart_inventory);
             this.Controls.Add(this.txtpart_name);
             this.Controls.Add(this.txtpart_id);
@@ -262,11 +319,15 @@
         private System.Windows.Forms.TextBox txtpart_id;
         private System.Windows.Forms.TextBox txtpart_name;
         private System.Windows.Forms.TextBox txtpart_inventory;
-        private System.Windows.Forms.TextBox txtpart_price_cost;
-        private System.Windows.Forms.TextBox txtpart_max;
+        private System.Windows.Forms.TextBox txtpart_price;
         private System.Windows.Forms.TextBox txtpart_min;
+        private System.Windows.Forms.TextBox txtpart_max;
         private System.Windows.Forms.TextBox txtpart_mach_comp;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Label lblInv_error;
+        private System.Windows.Forms.Label lblPrice_error;
+        private System.Windows.Forms.Label lblMinMax_error;
+        private System.Windows.Forms.Label lblMachineID_error;
     }
 }

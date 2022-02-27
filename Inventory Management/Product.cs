@@ -30,17 +30,61 @@ namespace Inventory_Management
 
         public void addAssociatedPart(Part part)
         {
-            return; 
+            AssociatedParts.Add(part);  // Add the new part
         }
         
         public bool removeAssociatedPart(int id)
         {
-            return false;
+            bool found = false;                     // Used to determine if the part is found
+
+            foreach (Part part in AssociatedParts)  // Iterate through the list of AssociatedParts
+            {
+                if (part.PartId == id)              // If the part ID is equal to the ID selected, then...
+                {
+                    AssociatedParts.Remove(part);   // Remove that part
+                    found = true;                   // Set the found variable to true
+                }
+            }   
+            return found;                           // Return the found variable
         }
 
         public Part lookupAssociatedPart(int id)
         {
-            return null;
+            Part inHousePart = new Inhouse();
+            Part outsourcePart = new Outsourced();
+            bool found = false;
+
+            foreach (Part part in AssociatedParts)
+            {
+                if (part.PartId == id)
+                {
+                    found = true;
+                    if (part is Inhouse)
+                    {
+                        inHousePart = part;
+                    }
+                    else
+                    {
+                        outsourcePart = part;
+                    }
+                }
+            }
+            if (found)
+            {
+                if (inHousePart != null)
+                {
+                    return inHousePart;
+                }
+                else
+                {
+                    return outsourcePart;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
         }
     }
 }

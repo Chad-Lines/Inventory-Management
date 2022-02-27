@@ -31,11 +31,10 @@ namespace Inventory_Management
             resetForm();            // Reset the form
         }
 
-       public string GetNextID()
+        public string GetNextID()
         {
             // The purpose of this method is to generate the next ID automaticall by
-            // comparing the existing IDs
-            //Inventory I = new Inventory();                                          
+            // comparing the existing IDs                                   
             int nextID = 0;                                     // Initialize nextID as 0
             for (int i = 0; i < Inventory.AllParts.Count; i++)  // For each part...
             {

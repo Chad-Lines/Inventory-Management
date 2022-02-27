@@ -75,6 +75,8 @@
             this.dgvParts.Name = "dgvParts";
             this.dgvParts.Size = new System.Drawing.Size(561, 280);
             this.dgvParts.TabIndex = 2;
+            this.dgvParts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvParts_CellClick);
+            this.dgvParts.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvParts_CellContentClick);
             this.dgvParts.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.partsBinding);
             // 
             // dgvProducts
@@ -85,6 +87,7 @@
             this.dgvProducts.Name = "dgvProducts";
             this.dgvProducts.Size = new System.Drawing.Size(561, 280);
             this.dgvProducts.TabIndex = 3;
+            this.dgvProducts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProducts_CellClick);
             this.dgvProducts.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvProducts_CellContentClick);
             // 
             // label3

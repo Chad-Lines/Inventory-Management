@@ -12,13 +12,18 @@ namespace Inventory_Management
 {
     public partial class Form1 : Form
     {
+        public static int currentPartIndex;     // Used to hold the index of the part selected
+        public static Part currentPart;         // Used to hold the part being selected
+        public static int currentProductIndex;  // Used to hold the index of the product selected
+        public static Part currentProduct;      // Used to hold the product being selected
+
         public Form1()
         {
             InitializeComponent();
 
             // Setting up the Product Datagrid
             // -------------------------------
-            dgvProducts.DataSource = Inventory.Products;                                                  // Adding the product list as the data source
+            dgvProducts.DataSource = Inventory.Products;                                                // Adding the product list as the data source
             dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;                        // Full row sleect (rather than single cells)
             dgvProducts.ReadOnly = true;                                                                // Setting the data to "read only"
             dgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize; // Auto-sizing the column headers
@@ -48,9 +53,23 @@ namespace Inventory_Management
         }
 
         private void button4_Click(object sender, EventArgs e) // OPEN MODIFY PART
-        {
-            ModifyPart modifyPart = new ModifyPart();   // Instantiate the Modify Part screen
-            modifyPart.Show();                          // Shows the Modify Part Screen
+        {   
+            if(dgvParts.CurrentRow.DataBoundItem.GetType() == typeof(Inhouse))      // If the current item is an 'Inhouse' part, then...
+            {
+                Inhouse part = (Inhouse)dgvParts.CurrentRow.DataBoundItem;          // Create an Inhouse part to represent that part, and...
+                ModifyPart modifyPart = new ModifyPart(part);                       // Instantiate the Modify Part screen
+                modifyPart.Show();                                                  // Shows the Modify Part Screen
+            }
+            else if (dgvParts.CurrentRow.DataBoundItem.GetType() == typeof(Outsourced))
+            {
+                Outsourced part = (Outsourced)dgvParts.CurrentRow.DataBoundItem;    // Create an Inhouse part to represent that part, and...
+                ModifyPart modifyPart = new ModifyPart(part);                       // Instantiate the Modify Part screen
+                modifyPart.Show();                                                  // Shows the Modify Part Screen
+            }
+            else
+            {                                                                       // If no part has been selected...
+                MessageBox.Show("No Part Selected");                                // Let the user know of the error
+            }
         }
 
         private void button3_Click(object sender, EventArgs e) // DELETE PART
@@ -145,11 +164,29 @@ namespace Inventory_Management
             this.Close();
         }
 
+        private void dgvProducts_CellClick(object sender, DataGridViewCellEventArgs e) // CAPTURE PRODUCT SELECTION
+        {
+            currentPartIndex = e.RowIndex;                      // Capturing the row index
+            currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected product (for
+                                                                // use in ModifyProduct)
+        }
 
-        private void dgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvParts_CellClick(object sender, DataGridViewCellEventArgs e) // CAPTURE PART SELECTION
+        {            
+            currentPartIndex = e.RowIndex;                      // Capturing the row index
+            currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected part (for use in ModifyPart)
+        }   
+
+        private void dgvParts_CellContentClick(object sender, DataGridViewCellEventArgs e) // NOT USED
+        {
+
+        }
+        private void dgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e) // NOT USED
         {
 
 
         }
+
+        
     }
 }

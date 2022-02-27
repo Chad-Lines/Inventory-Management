@@ -25,18 +25,18 @@ namespace Inventory_Management
             Products.Add(new Product { ProductId = 6, Name = "Series DC-X4S Acoustic", Price = 849.99m, InStock = 4, Min = 1, Max = 10 });
 
             // Adding initial outsourced part data
-            AllParts.Add(new Outsourced { PartId = 1, Name = "6-String Pack", Price = 5.99m, InStock = 5, Min = 1, Max = 10, CompanyName = "Acme" });
-            AllParts.Add(new Outsourced { PartId = 2, Name = "12-String Pack", Price = 8.99m, InStock = 5, Min = 1, Max = 10, CompanyName = "Acme" });
-            AllParts.Add(new Outsourced { PartId = 3, Name = "Bridge", Price = 4.99m, InStock = 5, Min = 1, Max = 10, CompanyName = "Acme" });
-            AllParts.Add(new Outsourced { PartId = 4, Name = "Single-Line Pickups", Price = 69.99m, InStock = 5, Min = 1, Max = 10, CompanyName = "Acme" });
-            AllParts.Add(new Outsourced { PartId = 5, Name = "Knob/Switch Pack", Price = 44.99m, InStock = 5, Min = 1, Max = 10, CompanyName = "Acme" });
+            AllParts.Add(new Outsourced { PartId = 1, Name = "6-String Pack", Price = 5.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = false, CompanyName = "Acme" }); ;
+            AllParts.Add(new Outsourced { PartId = 2, Name = "12-String Pack", Price = 8.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = false, CompanyName = "Acme" });
+            AllParts.Add(new Outsourced { PartId = 3, Name = "Bridge", Price = 4.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = false, CompanyName = "Acme" });
+            AllParts.Add(new Outsourced { PartId = 4, Name = "Single-Line Pickups", Price = 69.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = false, CompanyName = "Acme" });
+            AllParts.Add(new Outsourced { PartId = 5, Name = "Knob/Switch Pack", Price = 44.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = false, CompanyName = "Acme" });
 
             // Adding initial in house part data
-            AllParts.Add(new Inhouse { PartId =  6, Name = "Bridge", Price = 3.99m, InStock = 5, Min = 1, Max = 10, MachineID = 1 });
-            AllParts.Add(new Inhouse { PartId =  7, Name = "Fret Pack", Price = 19.99m, InStock = 5, Min = 1, Max = 10, MachineID = 2 });
-            AllParts.Add(new Inhouse { PartId =  8, Name = "Pegs", Price = 4.99m, InStock = 5, Min = 1, Max = 10, MachineID = 3 });
-            AllParts.Add(new Inhouse { PartId =  9, Name = "Tuning Pegs", Price = 29.99m, InStock = 5, Min = 1, Max = 10, MachineID = 2 });
-            AllParts.Add(new Inhouse { PartId = 10, Name = "Pick Guard", Price = 12.99m, InStock = 5, Min = 1, Max = 10, MachineID = 1 });
+            AllParts.Add(new Inhouse { PartId =  6, Name = "Bridge", Price = 3.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = true, MachineID = 1 });
+            AllParts.Add(new Inhouse { PartId =  7, Name = "Fret Pack", Price = 19.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = true, MachineID = 2 });
+            AllParts.Add(new Inhouse { PartId =  8, Name = "Pegs", Price = 4.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = true, MachineID = 3 });
+            AllParts.Add(new Inhouse { PartId =  9, Name = "Tuning Pegs", Price = 29.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = true, MachineID = 2 });
+            AllParts.Add(new Inhouse { PartId = 10, Name = "Pick Guard", Price = 12.99m, InStock = 5, Min = 1, Max = 10, IsInHouse = true, MachineID = 1 });
         }
                
         // METHODS --------------------------------

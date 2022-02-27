@@ -25,9 +25,6 @@ namespace Inventory_Management
         public bool maxValid = false;
         public bool machOrCompValid = false;
 
-        // Getting the Part list
-        //public static BindingList<Part> parts = Part.parts;                 // Getting the list of parts
-
         public AddPart()
         {
             InitializeComponent();
@@ -54,13 +51,6 @@ namespace Inventory_Management
         {
             // This method checks whether all the inputs have been marked as valid.
             // If they have, then we return 'true' which enables the Save button.
-            Console.WriteLine("Name: " + nameValid);
-            Console.WriteLine("Inv: " + inventoryValid);
-            Console.WriteLine("Price: " + priceValid);
-            Console.WriteLine("Min: " + minValid);
-            Console.WriteLine("Max: " + maxValid);
-            Console.WriteLine("M/C: " + machOrCompValid);
-
             return nameValid && inventoryValid && priceValid && 
                 minValid && maxValid && machOrCompValid;        
            

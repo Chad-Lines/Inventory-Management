@@ -13,8 +13,11 @@ namespace Inventory_Management
     public partial class AddProduct : Form
     {
 
-        public static int currentPartIndex;
-        public static Part currentPart;
+        public static int currentAllPartIndex;
+        public static Part currentAllPart;
+
+        public static int currentProdPartIndex;
+        public static Part currentProdPart;
 
         // Validation Variables
         public bool nameValid = false;
@@ -29,12 +32,12 @@ namespace Inventory_Management
             InitializeComponent();
 
             // Populating the 'All Candidate Parts' Data Grid View
-            dgvAllParts.DataSource = Inventory.AllParts;                                                   // Adding the AssociatedParts list
-            dgvAllParts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;                           // Full row sleect (rather than single cells)
-            dgvAllParts.ReadOnly = true;                                                                   // Setting the data to "read only"
-            dgvAllParts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;    // Auto-sizing the column headers
-            dgvAllParts.MultiSelect = false;                                                               // Disabling multi-select
-            dgvAllParts.AllowUserToAddRows = false;                                                        // Disallow adding new rows    
+            dgvAllParts.DataSource = Inventory.AllParts;                                                    // Adding the AssociatedParts list
+            dgvAllParts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;                            // Full row sleect (rather than single cells)
+            dgvAllParts.ReadOnly = true;                                                                    // Setting the data to "read only"
+            dgvAllParts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;     // Auto-sizing the column headers
+            dgvAllParts.MultiSelect = false;                                                                // Disabling multi-select
+            dgvAllParts.AllowUserToAddRows = false;                                                         // Disallow adding new rows    
 
             // Populating the 'Parts Associated with this Product' Data Grid View
             dgvParts.DataSource = Product.AssociatedParts;                                                  // Adding the AssociatedParts list
@@ -44,7 +47,7 @@ namespace Inventory_Management
             dgvParts.MultiSelect = false;                                                                   // Disabling multi-select
             dgvParts.AllowUserToAddRows = false;                                                            // Disallow adding new rows     
 
-            resetForm();            
+            resetForm();
         }
         public string GetNextID() // DONE
         {
@@ -70,16 +73,34 @@ namespace Inventory_Management
 
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void button5_Click(object sender, EventArgs e) // CANCEL BUTTON (DONE)
         {
             this.Close();
-        } // CANCEL BUTTON
+        } 
 
-        private void button2_Click(object sender, EventArgs e) // ADD BUTTON
+        private void button2_Click(object sender, EventArgs e) // ADD BUTTON (DONE)
         {
             // Add the "Current Part" (selected from dgvAllParts)
             // to the AssociatedParts list, which will cause it to show up in dgvParts
-            Product.AssociatedParts.Add(currentPart);   
+
+            bool isDuplicate = false;                                               // Determine whether an addition is a duplicate
+
+            if (currentAllPart != null)                                             // If the currentAllPart isn't null, then...
+            { 
+                for (int i = 0; i < dgvParts.Rows.Count; i++)                       // Iterate through the existing dgvParts rows
+                {
+                    if (currentAllPart.PartId.ToString() ==                         // Check the name of the part to be inserted against names
+                        dgvParts.Rows[i].Cells[0].Value.ToString())                 // of already existing parts. If there's a match, then...
+                    {
+                        isDuplicate = true;                                         // Set the duplicate variable as true, and...
+                        MessageBox.Show(dgvParts.Rows[i].Cells[1].Value +           // Show a message box to alert the user
+                            " has already been added");
+                        break;                                                      // Stop searching
+                    }                    
+                }
+                if (!isDuplicate) { Product.AssociatedParts.Add(currentAllPart); }  // If it's not a duplicate, add the new part to the list
+            }
+            else { MessageBox.Show("No Part Selected."); }                          // If the currentPart is null, alert the user
         }
 
         private void resetForm() // DONE
@@ -148,8 +169,23 @@ namespace Inventory_Management
 
         private void dgvAllParts_CellClick(object sender, DataGridViewCellEventArgs e) // DONE
         {   
-            currentPartIndex = e.RowIndex;                      // Capturing the row index
-            currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected part (for use in ModifyPart)
+            currentAllPartIndex = e.RowIndex;                           // Capturing the row index
+            currentAllPart = Inventory.AllParts[currentAllPartIndex];   // Using the index to get the selected part (for use in ModifyPart)
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e) // DONE
+        {
+            // Remove the "Current Part" (selected from dgvParts) from the AssociatedParts list
+            if (currentProdPart != null) { Product.AssociatedParts.Remove(currentProdPart); }
+            else { MessageBox.Show("No Part Selected."); }
+        }
+
+        private void dgvParts_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            currentProdPartIndex = e.RowIndex;                           // Capturing the row index
+            currentProdPart = dgvParts.//;
+            //currentProdPart = Inventory.AllParts[currentAllPartIndex];   // Using the index to get the selected part (for use in ModifyPart)
+            
         }
     }
 }

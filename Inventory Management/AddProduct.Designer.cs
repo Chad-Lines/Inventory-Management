@@ -41,7 +41,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.SearchButton = new System.Windows.Forms.Button();
             this.AddButton = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.DeleteButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.txtPartSearch = new System.Windows.Forms.TextBox();
@@ -65,6 +65,7 @@
             this.dgvParts.Name = "dgvParts";
             this.dgvParts.Size = new System.Drawing.Size(724, 146);
             this.dgvParts.TabIndex = 0;
+            this.dgvParts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvParts_CellClick);
             // 
             // dgvAllParts
             // 
@@ -177,14 +178,15 @@
             this.AddButton.UseVisualStyleBackColor = true;
             this.AddButton.Click += new System.EventHandler(this.button2_Click);
             // 
-            // button3
+            // DeleteButton
             // 
-            this.button3.Location = new System.Drawing.Point(934, 410);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 13;
-            this.button3.Text = "Delete";
-            this.button3.UseVisualStyleBackColor = true;
+            this.DeleteButton.Location = new System.Drawing.Point(934, 410);
+            this.DeleteButton.Name = "DeleteButton";
+            this.DeleteButton.Size = new System.Drawing.Size(75, 23);
+            this.DeleteButton.TabIndex = 13;
+            this.DeleteButton.Text = "Delete";
+            this.DeleteButton.UseVisualStyleBackColor = true;
+            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // SaveButton
             // 
@@ -301,7 +303,7 @@
             this.Controls.Add(this.txtPartSearch);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.SaveButton);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.AddButton);
             this.Controls.Add(this.SearchButton);
             this.Controls.Add(this.label9);
@@ -339,7 +341,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button SearchButton;
         private System.Windows.Forms.Button AddButton;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TextBox txtPartSearch;

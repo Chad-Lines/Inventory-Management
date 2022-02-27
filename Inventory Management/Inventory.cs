@@ -146,10 +146,16 @@ namespace Inventory_Management
             }                       
         }
 
-        public void updatePate(int id, Part part) // DONE
+        public void updatePart(int id, Part part) // DONE
         {
-            deletePart(part);
-            addPart(part);  
+            for (int i = 0; i < AllParts.Count; i++)    // Iterate through AllParts
+            {
+                if (AllParts[i].PartId == id)           // If the AllParts part ID matches that selected by the user, then...
+                {
+                    AllParts[i] = part;                 // Replace the found part with the edited part
+                    break;                              // Break the loop
+                }
+            }
         }
     }
 }

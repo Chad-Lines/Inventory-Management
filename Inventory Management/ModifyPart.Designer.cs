@@ -115,6 +115,7 @@
             this.SaveButton.TabIndex = 40;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // txtpart_mach_comp
             // 
@@ -122,6 +123,7 @@
             this.txtpart_mach_comp.Name = "txtpart_mach_comp";
             this.txtpart_mach_comp.Size = new System.Drawing.Size(100, 20);
             this.txtpart_mach_comp.TabIndex = 39;
+            this.txtpart_mach_comp.TextChanged += new System.EventHandler(this.txtpart_mach_comp_TextChanged);
             // 
             // txtpart_max
             // 
@@ -129,6 +131,7 @@
             this.txtpart_max.Name = "txtpart_max";
             this.txtpart_max.Size = new System.Drawing.Size(79, 20);
             this.txtpart_max.TabIndex = 38;
+            this.txtpart_max.TextChanged += new System.EventHandler(this.txtpart_max_TextChanged);
             // 
             // txtpart_min
             // 
@@ -136,6 +139,7 @@
             this.txtpart_min.Name = "txtpart_min";
             this.txtpart_min.Size = new System.Drawing.Size(68, 20);
             this.txtpart_min.TabIndex = 37;
+            this.txtpart_min.TextChanged += new System.EventHandler(this.txtpart_min_TextChanged);
             // 
             // txtpart_price
             // 
@@ -143,6 +147,7 @@
             this.txtpart_price.Name = "txtpart_price";
             this.txtpart_price.Size = new System.Drawing.Size(100, 20);
             this.txtpart_price.TabIndex = 36;
+            this.txtpart_price.TextChanged += new System.EventHandler(this.txtpart_price_TextChanged);
             // 
             // txtpart_inventory
             // 
@@ -150,6 +155,7 @@
             this.txtpart_inventory.Name = "txtpart_inventory";
             this.txtpart_inventory.Size = new System.Drawing.Size(100, 20);
             this.txtpart_inventory.TabIndex = 35;
+            this.txtpart_inventory.TextChanged += new System.EventHandler(this.txtpart_inventory_TextChanged);
             // 
             // txtpart_name
             // 
@@ -157,6 +163,7 @@
             this.txtpart_name.Name = "txtpart_name";
             this.txtpart_name.Size = new System.Drawing.Size(100, 20);
             this.txtpart_name.TabIndex = 34;
+            this.txtpart_name.TextChanged += new System.EventHandler(this.txtpart_name_TextChanged);
             // 
             // txtpart_id
             // 

@@ -24,6 +24,7 @@ namespace Inventory_Management
         public bool minValid = false;
         public bool maxValid = false;
         public bool machOrCompValid = false;
+        public bool initialized = false; 
 
         public AddPart()
         {
@@ -50,9 +51,47 @@ namespace Inventory_Management
         {
             // This method checks whether all the inputs have been marked as valid.
             // If they have, then we return 'true' which enables the Save button.
-            return nameValid && inventoryValid && priceValid && 
-                minValid && maxValid && machOrCompValid;        
-           
+            if (initialized)
+            {
+                if (!string.IsNullOrWhiteSpace(txtpart_max.Text) && !string.IsNullOrWhiteSpace(txtpart_min.Text))
+                {
+                    if (Int32.Parse(txtpart_max.Text) < Int32.Parse(txtpart_min.Text))
+                    {
+                        MessageBox.Show("Max must be greater than Min");
+                        return false;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(txtpart_max.Text) && !string.IsNullOrWhiteSpace(txtpart_min.Text) &&
+                    !string.IsNullOrWhiteSpace(txtpart_inventory.Text))
+                    {
+                        if (Int32.Parse(txtpart_inventory.Text) > Int32.Parse(txtpart_max.Text) ||
+                            Int32.Parse(txtpart_inventory.Text) < Int32.Parse(txtpart_min.Text))
+                        {
+                            MessageBox.Show("Inventory must be between Min and Max");
+                            return false;
+                        }
+                        else
+                        {
+                            return nameValid && inventoryValid && priceValid &&
+                            minValid && maxValid; ;
+                        }
+                    }
+                    else
+                    {
+                        return nameValid && inventoryValid && priceValid &&
+                        minValid && maxValid;
+                    }
+                }
+                else
+                {
+                    return nameValid && inventoryValid && priceValid &&
+                    minValid && maxValid;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         private void radio_outsourced_CheckedChanged(object sender, EventArgs e)
@@ -99,7 +138,7 @@ namespace Inventory_Management
                 Int32.Parse(txtpart_inventory.Text);                        // Try to convert the string into an Int
                 lblInv_error.Hide();                                        // If it works, hide the error label, and...
                 inventoryValid = true;                                      // Mark the field as valid
-
+                SaveButton.Enabled = allowSave();                           // Check if we can save
             }
             catch (FormatException)
             {
@@ -115,7 +154,7 @@ namespace Inventory_Management
             {
                 txtpart_inventory.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
             }
-            SaveButton.Enabled = allowSave();                               // Check if we can save
+            
         }
 
         private void txtpart_price_TextChanged(object sender, EventArgs e)
@@ -125,6 +164,7 @@ namespace Inventory_Management
                 Decimal.Parse(txtpart_price.Text);                      // Try to convert the string into an Int
                 lblPrice_error.Hide();                                  // If it works, hide the error label
                 priceValid = true;
+                SaveButton.Enabled = allowSave();                           // Check if we can save
 
             }
             catch (FormatException)
@@ -143,33 +183,33 @@ namespace Inventory_Management
                 txtpart_price.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
                 priceValid = true;
             }
-            SaveButton.Enabled = allowSave();                           // Check if we can save
+            
         }   
 
         private void txtpart_min_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                Int32.Parse(txtpart_min.Text);                      // Try to convert the string into an Int
-                lblMinMax_error.Hide();                                  // If it works, hide the error label
+                Int32.Parse(txtpart_min.Text);                          // Try to convert the string into an Int
+                lblMinMax_error.Hide();                                 // If it works, hide the error label
                 minValid = true;
-
+                SaveButton.Enabled = allowSave();                       // Check if we can save
             }
             catch (FormatException)
             {
-                lblMinMax_error.Show();                                  // If it doesn't work, show the error label
+                lblMinMax_error.Show();                                 // If it doesn't work, show the error label
                 minValid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtpart_min.Text))          // If the textbox is empty...
+            if (string.IsNullOrWhiteSpace(txtpart_min.Text))            // If the textbox is empty...
             {
-                txtpart_min.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+                txtpart_min.BackColor = System.Drawing.Color.Salmon;    // Set the background color to Salmon
             }
             else
             {
-                txtpart_min.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+                txtpart_min.BackColor = System.Drawing.Color.White;      // If it's not empty, set it to White
             }
-            SaveButton.Enabled = allowSave();                           // Check if we can save
+            
 
         }
 
@@ -177,26 +217,26 @@ namespace Inventory_Management
         {
             try
             {
-                Int32.Parse(txtpart_max.Text);                      // Try to convert the string into an Int
-                lblMinMax_error.Hide();                                  // If it works, hide the error label
+                Int32.Parse(txtpart_max.Text);                          // Try to convert the string into an Int
+                lblMinMax_error.Hide();                                 // If it works, hide the error label
                 maxValid = true;
-
+                SaveButton.Enabled = allowSave();                       // Check if we can save
             }
             catch (FormatException)
             {
-                lblMinMax_error.Show();                                  // If it doesn't work, show the error label
+                lblMinMax_error.Show();                                 // If it doesn't work, show the error label
                 maxValid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtpart_max.Text))          // If the textbox is empty...
+            if (string.IsNullOrWhiteSpace(txtpart_max.Text))            // If the textbox is empty...
             {
-                txtpart_max.BackColor = System.Drawing.Color.Salmon;  // Set the background color to Salmon
+                txtpart_max.BackColor = System.Drawing.Color.Salmon;    // Set the background color to Salmon
             }
             else
             {
-                txtpart_max.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
+                txtpart_max.BackColor = System.Drawing.Color.White;     // If it's not empty, set it to White
             }
-            SaveButton.Enabled = allowSave();                           // Check if we can save
+            
         }
 
         private void txtpart_mach_comp_TextChanged(object sender, EventArgs e)
@@ -311,6 +351,8 @@ namespace Inventory_Management
             txtpart_min.BackColor = System.Drawing.Color.Salmon;
             txtpart_max.BackColor = System.Drawing.Color.Salmon;
             txtpart_mach_comp.BackColor = System.Drawing.Color.Salmon;
+
+            initialized = true;
         }
     }
 }

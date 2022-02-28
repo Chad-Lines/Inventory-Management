@@ -26,6 +26,7 @@ namespace Inventory_Management
         public bool minValid = false;
         public bool maxValid = false;
         public bool machOrCompValid = false;
+        public bool initialized = false;
 
         public ModifyPart(Inhouse part)
         {
@@ -49,6 +50,7 @@ namespace Inventory_Management
             txtpart_max.Text = part.Max.ToString();
             txtpart_mach_comp.Text = part.MachineID.ToString(); // The Inhouse parts use the machine ID
             label8.Text = inHouseText;
+            initialized = true;
         }
 
         public ModifyPart(Outsourced part)
@@ -73,18 +75,71 @@ namespace Inventory_Management
             txtpart_max.Text = part.Max.ToString();
             txtpart_mach_comp.Text = part.CompanyName;          // Outsourced items use a Company Name
             label8.Text = outsourceText;
+            initialized = true;
         }
 
         private bool allowSave()
         {
             // This method checks whether all the inputs have been marked as valid.
-            // If they have, then we return 'true' which enables the Save button.
+            // If they have, then we return 'true' which enables the Save button
+            if (initialized)
+            {
+                if (!string.IsNullOrWhiteSpace(txtpart_max.Text) && !string.IsNullOrWhiteSpace(txtpart_min.Text))
+                {
+                    if (Int32.Parse(txtpart_max.Text) < Int32.Parse(txtpart_min.Text))
+                    {
+                        MessageBox.Show("Max must be greater than Min");
+                        return false;
+                    }
+                    else if(!string.IsNullOrWhiteSpace(txtpart_max.Text) && !string.IsNullOrWhiteSpace(txtpart_min.Text) &&
+                        !string.IsNullOrWhiteSpace(txtpart_inventory.Text))
+                    {
+                        if (Int32.Parse(txtpart_inventory.Text) > Int32.Parse(txtpart_max.Text) ||
+                            Int32.Parse(txtpart_inventory.Text) < Int32.Parse(txtpart_min.Text))
+                        {
+                            MessageBox.Show("Inventory must be between Min and Max");
+                            return false;
+                        }
+                        else
+                        {
+                            return nameValid && inventoryValid && priceValid &&
+                            minValid && maxValid;
+                        }                            
+                    }
+                    else
+                    {
+                        return nameValid && inventoryValid && priceValid &&
+                        minValid && maxValid;
+                    }
+                }
+                else
+                {
+                    return nameValid && inventoryValid && priceValid &&
+                    minValid && maxValid;
+                }
+            }
+            else
+            {
+                return false;
+            }
 
-            Console.WriteLine(nameValid && inventoryValid && priceValid &&
-                minValid && maxValid && machOrCompValid);
-
-            return nameValid && inventoryValid && priceValid &&
-                minValid && maxValid && machOrCompValid;
+            
+            if (Int32.Parse(txtpart_max.Text) < Int32.Parse(txtpart_min.Text))
+            {
+                MessageBox.Show("Max must be greater than Min");
+                return false;
+            }
+            else if (Int32.Parse(txtpart_inventory.Text) > Int32.Parse(txtpart_max.Text) ||
+                Int32.Parse(txtpart_inventory.Text) < Int32.Parse(txtpart_min.Text))
+            {
+                MessageBox.Show("Inventory must be between Min and Max");
+                return false;
+            }
+            else
+            {
+                return nameValid && inventoryValid && priceValid &&
+                minValid && maxValid;
+            }
 
         }
 
@@ -128,6 +183,7 @@ namespace Inventory_Management
                 Int32.Parse(txtpart_inventory.Text);                        // Try to convert the string into an Int
                 lblInv_error.Hide();                                        // If it works, hide the error label
                 inventoryValid = true;
+                SaveButton.Enabled = allowSave();                               // Check if we can save
 
             }
             catch (FormatException)
@@ -144,7 +200,7 @@ namespace Inventory_Management
             {
                 txtpart_inventory.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
             }
-            SaveButton.Enabled = allowSave();                               // Check if we can save
+            
         }
 
         private void txtpart_price_TextChanged(object sender, EventArgs e)
@@ -182,7 +238,7 @@ namespace Inventory_Management
                 Int32.Parse(txtpart_min.Text);                      // Try to convert the string into an Int
                 lblMinMax_error.Hide();                                  // If it works, hide the error label
                 minValid = true;
-
+                SaveButton.Enabled = allowSave();                           // Check if we can save
             }
             catch (FormatException)
             {
@@ -198,7 +254,7 @@ namespace Inventory_Management
             {
                 txtpart_min.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
             }
-            SaveButton.Enabled = allowSave();                           // Check if we can save
+            
         }
 
         private void txtpart_max_TextChanged(object sender, EventArgs e)
@@ -208,7 +264,7 @@ namespace Inventory_Management
                 Int32.Parse(txtpart_max.Text);                          // Try to convert the string into an Int
                 lblMinMax_error.Hide();                                 // If it works, hide the error label
                 maxValid = true;
-
+                SaveButton.Enabled = allowSave();                           // Check if we can save
             }
             catch (FormatException)
             {
@@ -224,7 +280,7 @@ namespace Inventory_Management
             {
                 txtpart_max.BackColor = System.Drawing.Color.White;     // If it's not empty, set it to White
             }
-            SaveButton.Enabled = allowSave();                           // Check if we can save
+            
         }
 
         private void txtpart_mach_comp_TextChanged(object sender, EventArgs e)

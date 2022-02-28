@@ -74,16 +74,26 @@ namespace Inventory_Management
 
         private void button3_Click(object sender, EventArgs e) // DELETE PART
         {
-            if (dgvParts.CurrentRow == null || !dgvParts.CurrentRow.Selected)   // If there are no rows, or if there are none selected
+            var option = MessageBox.Show("Are you sure you want to delete this part?", "Confirm Delete", MessageBoxButtons.YesNo);
+
+            if(option == DialogResult.Yes)
             {
-                MessageBox.Show("Nothing is Selected");                         // Show the user an error message
+                if (dgvParts.CurrentRow == null || !dgvParts.CurrentRow.Selected)   // If there are no rows, or if there are none selected
+                {
+                    MessageBox.Show("Nothing is Selected");                         // Show the user an error message
+                    return;
+                }
+
+                Inventory I = new Inventory();                                      // Instantiating Inventory to access it's method
+                Part P = dgvParts.CurrentRow.DataBoundItem as Part;                 // This is the actual object that is selected
+                int Index = dgvParts.CurrentCell.RowIndex;                          // You can then use that object to reference
+                I.deletePart(P);                                                    // Delete the item from the list
+            }
+            else
+            {
                 return;
             }
-
-            Inventory I = new Inventory();                                      // Instantiating Inventory to access it's method
-            Part P = dgvParts.CurrentRow.DataBoundItem as Part;                 // This is the actual object that is selected
-            int Index = dgvParts.CurrentCell.RowIndex;                          // You can then use that object to reference
-            I.deletePart(P);                                                    // Delete the item from the list
+            
         }
 
         private void button1_Click(object sender, EventArgs e) // SEARCH PARTS
@@ -116,23 +126,53 @@ namespace Inventory_Management
 
         private void button7_Click(object sender, EventArgs e) // OPEN MODIFY PRODUCT
         {
-            ModifyProduct modifyProduct = new ModifyProduct(currentProduct);  // Instantiate the Modify Product screen
-            modifyProduct.Show();                                           // Shows the Modify Product Screen
+            if(currentProduct != null)
+            {
+                ModifyProduct modifyProduct = new ModifyProduct(currentProduct);  // Instantiate the Modify Product screen
+                modifyProduct.Show();                                           // Shows the Modify Product Screen
+            }
+            else
+            {
+                MessageBox.Show("Please selecta a product.");
+            }
+            
 
         }
 
         private void button6_Click(object sender, EventArgs e) // DELETE PRODUCT
-        {            
-            if (dgvProducts.CurrentRow == null || !dgvProducts.CurrentRow.Selected) // If there are no rows, or if there are none selected
+        {
+
+            var option = MessageBox.Show("Are you sure you want to delete this product?", "Confirm Delete", MessageBoxButtons.YesNo);
+
+            if (option == DialogResult.Yes)
             {
-                MessageBox.Show("Nothing is Selected");                             // Show the user an error message
+                if (dgvProducts.CurrentRow == null || !dgvProducts.CurrentRow.Selected) // If there are no rows, or if there are none selected
+                {
+                    MessageBox.Show("Nothing is Selected");                             // Show the user an error message
+                    return;
+                }
+
+                Inventory I = new Inventory();                                  // Instantiating Inventory to access it's method
+                Product P = dgvProducts.CurrentRow.DataBoundItem as Product;    // This is the actual object that is selected
+                int Index = dgvProducts.CurrentCell.RowIndex;                   // You can then use that object to reference
+
+                if (P.AssociatedParts.Count > 0)
+                {
+                    MessageBox.Show(
+                        "You cannot delete a Product that has a part(s) associated with it."
+                     );
+                }
+                else
+                {
+                    I.removeProduct(P.ProductId);                                   // Delete the item from the list
+                }
+            }
+            else
+            {
                 return;
             }
 
-            Inventory I = new Inventory();                                  // Instantiating Inventory to access it's method
-            Product P = dgvProducts.CurrentRow.DataBoundItem as Product;    // This is the actual object that is selected
-            int Index = dgvProducts.CurrentCell.RowIndex;                   // You can then use that object to reference            
-            I.removeProduct(P.ProductId);                                   // Delete the item from the list
+                   
         }
 
         private void button2_Click(object sender, EventArgs e) // SEARCH PRODUCTS

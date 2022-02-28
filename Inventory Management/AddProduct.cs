@@ -31,6 +31,7 @@ namespace Inventory_Management
         public bool minValid = false;
         public bool maxValid = false;
         public bool machOrCompValid = false;
+        public bool initialized = false;
 
         public AddProduct()
         {
@@ -73,9 +74,46 @@ namespace Inventory_Management
         {
             // This method checks whether all the inputs have been marked as valid.
             // If they have, then we return 'true' which enables the Save button.
-            return nameValid && inventoryValid && priceValid &&
-                minValid && maxValid;
-
+            if (initialized)
+            {
+                if (!string.IsNullOrWhiteSpace(txtMax.Text) && !string.IsNullOrWhiteSpace(txtMin.Text))
+                {
+                    if (Int32.Parse(txtMax.Text) < Int32.Parse(txtMin.Text))
+                    {
+                        MessageBox.Show("Max must be greater than Min");
+                        return false;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(txtMax.Text) && !string.IsNullOrWhiteSpace(txtMin.Text) &&
+                    !string.IsNullOrWhiteSpace(txtInventory.Text))
+                    {
+                        if (Int32.Parse(txtInventory.Text) > Int32.Parse(txtMax.Text) ||
+                            Int32.Parse(txtInventory.Text) < Int32.Parse(txtMin.Text))
+                        {
+                            MessageBox.Show("Inventory must be between Min and Max");
+                            return false;
+                        }
+                        else
+                        {
+                            return nameValid && inventoryValid && priceValid &&
+                            minValid && maxValid; ;
+                        }
+                    }
+                    else
+                    {
+                        return nameValid && inventoryValid && priceValid &&
+                        minValid && maxValid;
+                    }
+                }
+                else
+                {
+                    return nameValid && inventoryValid && priceValid &&
+                    minValid && maxValid;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void button5_Click(object sender, EventArgs e) // CANCEL BUTTON (DONE)
@@ -134,6 +172,8 @@ namespace Inventory_Management
             txtInventory.BackColor = System.Drawing.Color.Salmon;
             txtMin.BackColor = System.Drawing.Color.Salmon;
             txtMax.BackColor = System.Drawing.Color.Salmon;
+
+            initialized = true;
         }
 
         private void SearchButton_Click(object sender, EventArgs e) // DONE
@@ -191,45 +231,27 @@ namespace Inventory_Management
 
         private void DeleteButton_Click(object sender, EventArgs e) // DONE
         {
+
             // Remove the "Current Part" (selected from dgvParts) from the AssociatedParts list
             if (currentProdPart != null) 
-            { 
-                newParts.Remove(currentProdPart);
-                foreach (DataGridViewRow row in dgvParts.SelectedRows)      // For each selected row in the Data Grid View
+            {
+                var option = MessageBox.Show("Are you sure you want to delete this part?", "Confirm Delete", MessageBoxButtons.YesNo);
+
+                if (option == DialogResult.Yes)
                 {
-                    dgvParts.Rows.RemoveAt(row.Index);                      // Remove the part (i.e. we're updating the DGV)
+                    newParts.Remove(currentProdPart);
+                    foreach (DataGridViewRow row in dgvParts.SelectedRows)      // For each selected row in the Data Grid View
+                    {
+                        dgvParts.Rows.RemoveAt(row.Index);                      // Remove the part (i.e. we're updating the DGV)
+                    }
                 }
+                else
+                {
+                    return;
+                }
+                
             }
             else { MessageBox.Show("No Part Selected."); }
-
-            //try                                                                 // Trying something different...
-            //{
-            //    if (dgvParts.SelectedRows.Count > 0)                            // If there is a row selected, then...
-            //    { 
-            //        Part currentPart = (Part)dgvParts.CurrentRow.DataBoundItem; // Convert the row into a part, and...
-
-            //        int id = Int32.Parse(txtProductID.Text);                    // Capture the prodcut ID, and...
-
-            //        Inventory I = new Inventory();                              // Instantiate a new inventory, and...
-            //        Product currentProduct = I.lookupProduct(id);               // Lookup the current product in the inventory, and...
-            //        currentProduct.removeAssociatedPart(currentPart.PartId);    // Remove the part from the "AssociatedParts" of the product, and...
-
-            //        foreach (DataGridViewRow row in dgvParts.SelectedRows)      // For each selected row in the Data Grid View
-            //        {
-            //            dgvParts.Rows.RemoveAt(row.Index);                      // Remove the part (i.e. we're updating the DGV)
-            //        }
-            //    }
-            //    else
-            //    {
-            //        MessageBox.Show("No part selected.");                       // If no row is selected, then alert the user
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    return;
-            //}
-
-
         }
 
         private void dgvParts_CellClick(object sender, DataGridViewCellEventArgs e) // DONE
@@ -256,8 +278,9 @@ namespace Inventory_Management
             {                                                       // If the textbox is not empty, then...
                 txtName.BackColor = System.Drawing.Color.White;     // Set the background color to White, and...
                 nameValid = true;                                   // Mark  the field as valid
+                SaveButton.Enabled = allowSave();                       // Check if we can save
             }
-            SaveButton.Enabled = allowSave();                       // Check if we can save
+            
         }
 
         private void txtInventory_TextChanged(object sender, EventArgs e) // DONE
@@ -267,6 +290,7 @@ namespace Inventory_Management
                 Int32.Parse(txtInventory.Text);                         // Try to convert the string into an int (validate)
                 lblInv_error.Hide();                                    // If it works, hide the error label, and...
                 inventoryValid = true;                                  // Mark the field as valid
+                SaveButton.Enabled = allowSave();                           // Check if we can save
             }
             catch (FormatException)
             {
@@ -284,7 +308,7 @@ namespace Inventory_Management
                 txtInventory.BackColor = System.Drawing.Color.White;    // If it's not empty, set it to White
                 inventoryValid = true;                                      // And mark the field as valid
             }
-            SaveButton.Enabled = allowSave();                           // Check if we can save
+            
         }
 
         private void txtPrice_TextChanged(object sender, EventArgs e) // DONE
@@ -294,6 +318,7 @@ namespace Inventory_Management
                 Decimal.Parse(txtPrice.Text);                       // Try to convert the string into a Decimal (validate)
                 lblPrice_error.Hide();                              // If it works, hide the error label, and...
                 priceValid = true;                                  // Mark the field as valid
+                SaveButton.Enabled = allowSave();                   // Check if we can save
             }
             catch (FormatException)
             {
@@ -311,7 +336,7 @@ namespace Inventory_Management
                 txtPrice.BackColor= System.Drawing.Color.White;     // If it's not empty, set it to White
                 priceValid = true;                                  // And mark the field as valid
             }
-            SaveButton.Enabled = allowSave();                       // Check if we can save
+            
         }
 
         private void txtMin_TextChanged(object sender, EventArgs e) // DONE
@@ -321,6 +346,7 @@ namespace Inventory_Management
                 Int32.Parse(txtMin.Text);                         // Try to convert the string into an int (validate)
                 lblMinMax_error.Hide();                           // If it works, hide the error label, and...
                 minValid = true;                                  // Mark the field as valid
+                SaveButton.Enabled = allowSave();                     // Check if we can save
             }
             catch (FormatException)
             {
@@ -338,7 +364,7 @@ namespace Inventory_Management
                 txtMin.BackColor = System.Drawing.Color.White;    // If it's not empty, set it to White
                 minValid = true;                                  // And mark the field as valid
             }
-            SaveButton.Enabled = allowSave();                     // Check if we can save
+            
         }
 
         private void txtMax_TextChanged(object sender, EventArgs e) // DONE
@@ -348,6 +374,7 @@ namespace Inventory_Management
                 Int32.Parse(txtMax.Text);                         // Try to convert the string into an int (validate)
                 lblMinMax_error.Hide();                           // If it works, hide the error label, and...
                 maxValid = true;                                  // Mark the field as valid
+                SaveButton.Enabled = allowSave();                 // Check if we can save
             }
             catch (FormatException)
             {
@@ -365,7 +392,6 @@ namespace Inventory_Management
                 txtMax.BackColor = System.Drawing.Color.White;    // If it's not empty, set it to White
                 maxValid = true;                                  // And mark the field as valid
             }
-            SaveButton.Enabled = allowSave();                     // Check if we can save
 
         }
 

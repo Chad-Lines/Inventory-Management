@@ -166,15 +166,29 @@ namespace Inventory_Management
 
         private void dgvProducts_CellClick(object sender, DataGridViewCellEventArgs e) // CAPTURE PRODUCT SELECTION
         {
-            currentPartIndex = e.RowIndex;                      // Capturing the row index
-            currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected product (for
-                                                                // use in ModifyProduct)
+            try{
+                currentPartIndex = e.RowIndex;                      // Capturing the row index
+                currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected product (for
+                                                                    // use in ModifyProduct)
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
         }
 
         private void dgvParts_CellClick(object sender, DataGridViewCellEventArgs e) // CAPTURE PART SELECTION
-        {            
-            currentPartIndex = e.RowIndex;                      // Capturing the row index
-            currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected part (for use in ModifyPart)
+        {
+            try
+            {
+                currentPartIndex = e.RowIndex;                      // Capturing the row index
+                currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected part (for use in ModifyPart)
+            }
+            catch(Exception ex)
+            {
+                return;
+            }
+            
         }   
 
         private void dgvParts_CellContentClick(object sender, DataGridViewCellEventArgs e) // NOT USED

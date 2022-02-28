@@ -227,6 +227,7 @@
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(136, 20);
             this.txtName.TabIndex = 18;
+            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // txtInventory
             // 

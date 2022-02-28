@@ -168,9 +168,17 @@ namespace Inventory_Management
         }
 
         private void dgvAllParts_CellClick(object sender, DataGridViewCellEventArgs e) // DONE
-        {   
-            currentAllPartIndex = e.RowIndex;                           // Capturing the row index
-            currentAllPart = Inventory.AllParts[currentAllPartIndex];   // Using the index to get the selected part (for use in ModifyPart)
+        {
+            try
+            {
+                currentAllPartIndex = e.RowIndex;                           // Capturing the row index
+                currentAllPart = Inventory.AllParts[currentAllPartIndex];   // Using the index to get the selected part (for use in ModifyPart)
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+            
         }
 
         private void DeleteButton_Click(object sender, EventArgs e) // DONE
@@ -180,12 +188,34 @@ namespace Inventory_Management
             else { MessageBox.Show("No Part Selected."); }
         }
 
-        private void dgvParts_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvParts_CellClick(object sender, DataGridViewCellEventArgs e) // DONE
         {
-            currentProdPartIndex = e.RowIndex;                           // Capturing the row index
-            currentProdPart = dgvParts.//;
-            //currentProdPart = Inventory.AllParts[currentAllPartIndex];   // Using the index to get the selected part (for use in ModifyPart)
+            try
+            {
+                currentProdPartIndex = e.RowIndex;                                  // Capturing the row index
+                currentProdPart = Product.AssociatedParts[currentProdPartIndex];    // Capture the part from Product.AssociatedParts
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
             
+                        
+        }
+
+        private void txtName_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtName.Text))            // If the textbox is empty, then...
+            {   
+                txtName.BackColor = System.Drawing.Color.Salmon;    // Set the background color to Salmon, and...
+                nameValid = false;                                  // Mark the field as invalid
+            }
+            else
+            {                                                       // If the textbox is not empty, then...
+                txtName.BackColor = System.Drawing.Color.White;     // Set the background color to White, and...
+                nameValid = true;                                   // Mark  the field as valid
+            }
+            SaveButton.Enabled = allowSave();                       // Check if we can save
         }
     }
 }

@@ -11,13 +11,18 @@ using System.Windows.Forms;
 namespace Inventory_Management
 {
     public partial class AddProduct : Form
-    {       
+    {
+        Product product = new Product();                        // Creating the product that we'll pass to Inventory later
+
         // Variables for adding and deleting parts 
         public static int currentAllPartIndex;
         public static Part currentAllPart;
 
         public static int currentProdPartIndex;
         public static Part currentProdPart;
+
+        // BindingList used to stage parts we want to add to the new product
+        BindingList<Part> newParts = new BindingList<Part>();
 
         // Validation Variables
         public bool nameValid = false;
@@ -40,7 +45,7 @@ namespace Inventory_Management
             dgvAllParts.AllowUserToAddRows = false;                                                         // Disallow adding new rows    
 
             // Populating the 'Parts Associated with this Product' Data Grid View
-            dgvParts.DataSource = Product.AssociatedParts;                                                  // Adding the AssociatedParts list
+            dgvParts.DataSource = newParts;                                                                 // Adding the AssociatedParts list
             dgvParts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;                               // Full row sleect (rather than single cells)
             dgvParts.ReadOnly = true;                                                                       // Setting the data to "read only"
             dgvParts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;        // Auto-sizing the column headers
@@ -98,7 +103,10 @@ namespace Inventory_Management
                         break;                                                      // Stop searching
                     }                    
                 }
-                if (!isDuplicate) { Product.AssociatedParts.Add(currentAllPart); }  // If it's not a duplicate, add the new part to the list
+                if (!isDuplicate)                                                   // If it's not a duplicate, add the new part to the list
+                {                                                 
+                    newParts.Add(currentAllPart); 
+                }  
             }
             else { MessageBox.Show("No Part Selected."); }                          // If the currentPart is null, alert the user
         }
@@ -184,23 +192,57 @@ namespace Inventory_Management
         private void DeleteButton_Click(object sender, EventArgs e) // DONE
         {
             // Remove the "Current Part" (selected from dgvParts) from the AssociatedParts list
-            if (currentProdPart != null) { Product.AssociatedParts.Remove(currentProdPart); }
+            if (currentProdPart != null) 
+            { 
+                newParts.Remove(currentProdPart);
+                foreach (DataGridViewRow row in dgvParts.SelectedRows)      // For each selected row in the Data Grid View
+                {
+                    dgvParts.Rows.RemoveAt(row.Index);                      // Remove the part (i.e. we're updating the DGV)
+                }
+            }
             else { MessageBox.Show("No Part Selected."); }
+
+            //try                                                                 // Trying something different...
+            //{
+            //    if (dgvParts.SelectedRows.Count > 0)                            // If there is a row selected, then...
+            //    { 
+            //        Part currentPart = (Part)dgvParts.CurrentRow.DataBoundItem; // Convert the row into a part, and...
+
+            //        int id = Int32.Parse(txtProductID.Text);                    // Capture the prodcut ID, and...
+
+            //        Inventory I = new Inventory();                              // Instantiate a new inventory, and...
+            //        Product currentProduct = I.lookupProduct(id);               // Lookup the current product in the inventory, and...
+            //        currentProduct.removeAssociatedPart(currentPart.PartId);    // Remove the part from the "AssociatedParts" of the product, and...
+
+            //        foreach (DataGridViewRow row in dgvParts.SelectedRows)      // For each selected row in the Data Grid View
+            //        {
+            //            dgvParts.Rows.RemoveAt(row.Index);                      // Remove the part (i.e. we're updating the DGV)
+            //        }
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("No part selected.");                       // If no row is selected, then alert the user
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    return;
+            //}
+
+
         }
 
         private void dgvParts_CellClick(object sender, DataGridViewCellEventArgs e) // DONE
         {
             try
             {
-                currentProdPartIndex = e.RowIndex;                                  // Capturing the row index
-                currentProdPart = Product.AssociatedParts[currentProdPartIndex];    // Capture the part from Product.AssociatedParts
+                currentProdPartIndex = e.RowIndex;                           // Capturing the row index
+                currentProdPart = Inventory.AllParts[currentAllPartIndex];   // Using the index to get the selected part (for use in ModifyPart)
             }
             catch (Exception ex)
             {
                 return;
             }
-            
-                        
         }
 
         private void txtName_TextChanged(object sender, EventArgs e) // DONE
@@ -329,12 +371,17 @@ namespace Inventory_Management
 
         private void SaveButton_Click(object sender, EventArgs e) // DONE
         {
-            Product product = new Product();                        // Creating the product that we'll pass to Inventory later
+            
             product.ProductId = Int32.Parse(txtProductID.Text);     // Adding the product ID
             product.Name = txtName.Text;                            // Adding the product Name
             product.InStock = Int32.Parse(txtInventory.Text);       // Adding the product InStock (Inventory) value
             product.Min = Int32.Parse(txtMin.Text);                 // Adding the product Min
             product.Max = Int32.Parse(txtMax.Text);                 // Adding the product Max
+
+            foreach (Part part in newParts)                         // For each part we've staged for the product...
+            {
+                product.addAssociatedPart(part);                    // Add the part to the product 
+            }
 
             Inventory I = new Inventory();                          // Instantiate an inventory object
             I.addProduct(product);                                  // Add the product to the inventory

@@ -281,6 +281,7 @@ namespace Inventory_Management
             }
             resetForm();                                            // Reset the Form                    
             MessageBox.Show("New Part Created Successfully");       // Show a message letting the user know the part was created
+            this.Close();
         }
 
         private void resetForm()

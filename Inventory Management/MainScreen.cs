@@ -15,7 +15,7 @@ namespace Inventory_Management
         public static int currentPartIndex;     // Used to hold the index of the part selected
         public static Part currentPart;         // Used to hold the part being selected
         public static int currentProductIndex;  // Used to hold the index of the product selected
-        public static Part currentProduct;      // Used to hold the product being selected
+        public static Product currentProduct;   // Used to hold the product being selected
 
         public Form1()
         {
@@ -116,8 +116,8 @@ namespace Inventory_Management
 
         private void button7_Click(object sender, EventArgs e) // OPEN MODIFY PRODUCT
         {
-            ModifyProduct modifyProduct = new ModifyProduct();  // Instantiate the Modify Product screen
-            modifyProduct.Show();                               // Shows the Modify Product Screen
+            ModifyProduct modifyProduct = new ModifyProduct(currentProduct);  // Instantiate the Modify Product screen
+            modifyProduct.Show();                                           // Shows the Modify Product Screen
 
         }
 
@@ -167,9 +167,8 @@ namespace Inventory_Management
         private void dgvProducts_CellClick(object sender, DataGridViewCellEventArgs e) // CAPTURE PRODUCT SELECTION
         {
             try{
-                currentPartIndex = e.RowIndex;                      // Capturing the row index
-                currentPart = Inventory.AllParts[currentPartIndex]; // Using the index to get the selected product (for
-                                                                    // use in ModifyProduct)
+                currentProductIndex = e.RowIndex;                           // Capturing the row index
+                currentProduct = Inventory.Products[currentProductIndex];   // Using the index to get the selected product (for use in ModifyProduct)
             }
             catch (Exception ex)
             {

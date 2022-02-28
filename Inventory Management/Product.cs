@@ -11,8 +11,8 @@ namespace Inventory_Management
     {
         // PROPERTIES --------------------------------
 
-        public static BindingList<Part> AssociatedParts = new BindingList<Part>();  // The parts that make up the product. This is created
-                                                                                    // as a BindingList of Parts
+        public BindingList<Part> AssociatedParts = new BindingList<Part>(); // The parts that make up the product. This is created
+                                                                            // as a BindingList of Parts
         public static int CurrentIndex { get; set; }
         public int ProductId { get; set; }  // The unique ID of the product
         public string Name { get; set; }    // The name of the product

@@ -11,8 +11,8 @@ using System.Windows.Forms;
 namespace Inventory_Management
 {
     public partial class AddProduct : Form
-    {
-
+    {       
+        // Variables for adding and deleting parts 
         public static int currentAllPartIndex;
         public static Part currentAllPart;
 
@@ -29,7 +29,7 @@ namespace Inventory_Management
 
         public AddProduct()
         {
-            InitializeComponent();
+            InitializeComponent();           
 
             // Populating the 'All Candidate Parts' Data Grid View
             dgvAllParts.DataSource = Inventory.AllParts;                                                    // Adding the AssociatedParts list
@@ -69,7 +69,7 @@ namespace Inventory_Management
             // This method checks whether all the inputs have been marked as valid.
             // If they have, then we return 'true' which enables the Save button.
             return nameValid && inventoryValid && priceValid &&
-                minValid && maxValid && machOrCompValid;
+                minValid && maxValid;
 
         }
 
@@ -203,7 +203,7 @@ namespace Inventory_Management
                         
         }
 
-        private void txtName_TextChanged(object sender, EventArgs e)
+        private void txtName_TextChanged(object sender, EventArgs e) // DONE
         {
             if (string.IsNullOrWhiteSpace(txtName.Text))            // If the textbox is empty, then...
             {   
@@ -216,6 +216,131 @@ namespace Inventory_Management
                 nameValid = true;                                   // Mark  the field as valid
             }
             SaveButton.Enabled = allowSave();                       // Check if we can save
+        }
+
+        private void txtInventory_TextChanged(object sender, EventArgs e) // DONE
+        {
+            try
+            {
+                Int32.Parse(txtInventory.Text);                         // Try to convert the string into an int (validate)
+                lblInv_error.Hide();                                    // If it works, hide the error label, and...
+                inventoryValid = true;                                  // Mark the field as valid
+            }
+            catch (FormatException)
+            {
+                lblInv_error.Show();                                    // If it doesn't work, show the error label
+                inventoryValid = false;                                 // And mark the field as invalid
+            }
+
+            if (string.IsNullOrWhiteSpace(txtInventory.Text))           // If the textbox is empty...
+            {
+                txtInventory.BackColor = System.Drawing.Color.Salmon;   // Set the background color to Salmon
+                inventoryValid = false;                                     // And mark the field as invalid
+            }
+            else
+            {
+                txtInventory.BackColor = System.Drawing.Color.White;    // If it's not empty, set it to White
+                inventoryValid = true;                                      // And mark the field as valid
+            }
+            SaveButton.Enabled = allowSave();                           // Check if we can save
+        }
+
+        private void txtPrice_TextChanged(object sender, EventArgs e) // DONE
+        {
+            try
+            {
+                Decimal.Parse(txtPrice.Text);                       // Try to convert the string into a Decimal (validate)
+                lblPrice_error.Hide();                              // If it works, hide the error label, and...
+                priceValid = true;                                  // Mark the field as valid
+            }
+            catch (FormatException)
+            {
+                lblPrice_error.Show();                              // If it doesn't work, show the error label
+                priceValid = false;                                 // And mark the field as invalid
+            }
+
+            if (string.IsNullOrWhiteSpace(txtPrice.Text))           // If the textbox is empty...
+            {
+                txtPrice.BackColor = System.Drawing.Color.Salmon;   // Set the background color to Salmon
+                priceValid = false;                                 // And mark the field as invalid
+            }
+            else
+            {
+                txtPrice.BackColor= System.Drawing.Color.White;     // If it's not empty, set it to White
+                priceValid = true;                                  // And mark the field as valid
+            }
+            SaveButton.Enabled = allowSave();                       // Check if we can save
+        }
+
+        private void txtMin_TextChanged(object sender, EventArgs e) // DONE
+        {
+            try
+            {
+                Int32.Parse(txtMin.Text);                         // Try to convert the string into an int (validate)
+                lblMinMax_error.Hide();                           // If it works, hide the error label, and...
+                minValid = true;                                  // Mark the field as valid
+            }
+            catch (FormatException)
+            {
+                lblMinMax_error.Show();                           // If it doesn't work, show the error label
+                minValid = false;                                 // And mark the field as invalid
+            }
+
+            if (string.IsNullOrWhiteSpace(txtMin.Text))           // If the textbox is empty...
+            {
+                txtMin.BackColor = System.Drawing.Color.Salmon;   // Set the background color to Salmon
+                minValid = false;                                 // And mark the field as invalid
+            }
+            else
+            {
+                txtMin.BackColor = System.Drawing.Color.White;    // If it's not empty, set it to White
+                minValid = true;                                  // And mark the field as valid
+            }
+            SaveButton.Enabled = allowSave();                     // Check if we can save
+        }
+
+        private void txtMax_TextChanged(object sender, EventArgs e) // DONE
+        {
+            try
+            {
+                Int32.Parse(txtMax.Text);                         // Try to convert the string into an int (validate)
+                lblMinMax_error.Hide();                           // If it works, hide the error label, and...
+                maxValid = true;                                  // Mark the field as valid
+            }
+            catch (FormatException)
+            {
+                lblMinMax_error.Show();                           // If it doesn't work, show the error label
+                maxValid = false;                                 // And mark the field as invalid
+            }
+
+            if (string.IsNullOrWhiteSpace(txtMax.Text))           // If the textbox is empty...
+            {
+                txtMax.BackColor = System.Drawing.Color.Salmon;   // Set the background color to Salmon
+                maxValid = false;                                 // And mark the field as invalid
+            }
+            else
+            {
+                txtMax.BackColor = System.Drawing.Color.White;    // If it's not empty, set it to White
+                maxValid = true;                                  // And mark the field as valid
+            }
+            SaveButton.Enabled = allowSave();                     // Check if we can save
+
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e) // DONE
+        {
+            Product product = new Product();                        // Creating the product that we'll pass to Inventory later
+            product.ProductId = Int32.Parse(txtProductID.Text);     // Adding the product ID
+            product.Name = txtName.Text;                            // Adding the product Name
+            product.InStock = Int32.Parse(txtInventory.Text);       // Adding the product InStock (Inventory) value
+            product.Min = Int32.Parse(txtMin.Text);                 // Adding the product Min
+            product.Max = Int32.Parse(txtMax.Text);                 // Adding the product Max
+
+            Inventory I = new Inventory();                          // Instantiate an inventory object
+            I.addProduct(product);                                  // Add the product to the inventory
+                
+            MessageBox.Show(product.Name + " added successfully."); // Let the user know it was added successfully
+            this.Close();                                           // Close the Add Product window
         }
     }
 }

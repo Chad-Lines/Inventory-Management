@@ -196,6 +196,7 @@
             this.SaveButton.TabIndex = 14;
             this.SaveButton.Text = "Save";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // button5
             // 
@@ -235,6 +236,7 @@
             this.txtInventory.Name = "txtInventory";
             this.txtInventory.Size = new System.Drawing.Size(136, 20);
             this.txtInventory.TabIndex = 19;
+            this.txtInventory.TextChanged += new System.EventHandler(this.txtInventory_TextChanged);
             // 
             // txtPrice
             // 
@@ -242,6 +244,7 @@
             this.txtPrice.Name = "txtPrice";
             this.txtPrice.Size = new System.Drawing.Size(136, 20);
             this.txtPrice.TabIndex = 20;
+            this.txtPrice.TextChanged += new System.EventHandler(this.txtPrice_TextChanged);
             // 
             // txtMin
             // 
@@ -249,6 +252,7 @@
             this.txtMin.Name = "txtMin";
             this.txtMin.Size = new System.Drawing.Size(65, 20);
             this.txtMin.TabIndex = 21;
+            this.txtMin.TextChanged += new System.EventHandler(this.txtMin_TextChanged);
             // 
             // txtMax
             // 
@@ -256,6 +260,7 @@
             this.txtMax.Name = "txtMax";
             this.txtMax.Size = new System.Drawing.Size(65, 20);
             this.txtMax.TabIndex = 22;
+            this.txtMax.TextChanged += new System.EventHandler(this.txtMax_TextChanged);
             // 
             // lblInv_error
             // 

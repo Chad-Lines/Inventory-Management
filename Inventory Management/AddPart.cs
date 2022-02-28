@@ -86,7 +86,7 @@ namespace Inventory_Management
             }
             else
             {
-                txtpart_name.BackColor = System.Drawing.Color.White;    // If it's not empty, set the background color to Salmon
+                txtpart_name.BackColor = System.Drawing.Color.White;    // If it's not empty, set the background color to White
                 nameValid = true;                                       // Marking the field as valid
             }
             SaveButton.Enabled = allowSave();                           // Check if we can save
@@ -96,15 +96,15 @@ namespace Inventory_Management
         {
             try
             {
-                Int32.Parse(txtpart_inventory.Text);                      // Try to convert the string into an Int
-                lblInv_error.Hide();                                  // If it works, hide the error label
-                inventoryValid = true;
+                Int32.Parse(txtpart_inventory.Text);                        // Try to convert the string into an Int
+                lblInv_error.Hide();                                        // If it works, hide the error label, and...
+                inventoryValid = true;                                      // Mark the field as valid
 
             }
             catch (FormatException)
             {
-                lblInv_error.Show();                                  // If it doesn't work, show the error label
-                inventoryValid = false;
+                lblInv_error.Show();                                        // If it doesn't work, show the error label
+                inventoryValid = false;                                     // And mark the field as invalid
             }
 
             if (string.IsNullOrWhiteSpace(txtpart_inventory.Text))          // If the textbox is empty...
@@ -115,7 +115,7 @@ namespace Inventory_Management
             {
                 txtpart_inventory.BackColor = System.Drawing.Color.White;   // If it's not empty, set it to White
             }
-            SaveButton.Enabled = allowSave();                           // Check if we can save
+            SaveButton.Enabled = allowSave();                               // Check if we can save
         }
 
         private void txtpart_price_TextChanged(object sender, EventArgs e)
